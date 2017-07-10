@@ -22,12 +22,12 @@ size_t delta_start = epsi_start + N;
 size_t a_start = delta_start + N - 1;
 
 // hyper parameters
-int cte_coeff = 1000;
-int epsi_coeff = 1000;
-int v_coeff = 500;
-int delta_coeff = 10;
-int a_coeff = 5;
-int delta_d_coeff = 100;
+int cte_coeff = 2500;
+int epsi_coeff = 3000;
+int v_coeff = 2;
+int delta_coeff = 100;
+int a_coeff = 100;
+int delta_d_coeff = 200;
 int a_d_coeff = 10;
 
 class FG_eval {
@@ -64,6 +64,24 @@ class FG_eval {
       fg[0] += delta_d_coeff * CppAD::pow(vars[delta_start + i + 1] - vars[delta_start + i], 2);
       fg[0] += a_d_coeff * CppAD::pow(vars[a_start + i + 1] - vars[a_start + i], 2);
     }
+
+    // for (int i = 0; i < N; i++) {
+    //   fg[0] += 3000*CppAD::pow(vars[cte_start + i], 2);
+    //   fg[0] += 3000*CppAD::pow(vars[epsi_start + i], 2);
+    //   fg[0] += CppAD::pow(vars[v_start + i] - ref_v, 2);
+    // }
+
+    // for (int i = 0; i < N - 1; i++) {
+    //   fg[0] += 5*CppAD::pow(vars[delta_start + i], 2);
+    //   fg[0] += 5*CppAD::pow(vars[a_start + i], 2);
+    //   // try adding penalty for speed + steer
+    //   fg[0] += 700*CppAD::pow(vars[delta_start + i] * vars[v_start+i], 2);
+    // }
+
+    // for (int i = 0; i < N - 2; i++) {
+    //   fg[0] += 200*CppAD::pow(vars[delta_start + i + 1] - vars[delta_start + i], 2);
+    //   fg[0] += 10*CppAD::pow(vars[a_start + i + 1] - vars[a_start + i], 2);
+    // }
 
     //
     // Setup Constraints
