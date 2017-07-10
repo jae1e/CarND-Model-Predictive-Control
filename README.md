@@ -5,11 +5,21 @@ Self-Driving Car Engineer Nanodegree Program
 
 ---
 
-### Model
+## Implementation
+
+### The Model
 There are two actuators to decide state of the car: delta and a. Delta is steering angle to control the heading direction of  the vehicle and a controls throttling. Also, constraints equation for waypoint fitting can be written as below.
 
+<img src="equation.png" width="360"/>
 
+### Timestep Length and Elapsed Duration
+Timestep length was 15 and elapsed time duration was 0.1 second. Timestep length is better to be longer, and time duration 0.1 was selected by the test to get good fitting result of the waypoints.
 
+### Polynomial Fitting and MPC preprocessing
+While building cost function, all status parameters(cte, v and epsi) and actuator parameters(delta and a) were considered. Also, two equation were added to the cost function to reduce the velocity when cte and epsi gets larger. These two equations helped maintain status of the car, because cte and epsi error can be controlled easier in lower velocity. For each parameter, cost coefficient as hyper parameters was tuned by the test.
+
+### Model Predictive Control with Latency
+There was 100 millisecond latency in actuators. Elapsed time duration, which is the time interval between waypoint prediction timestep, I used was 100 millisecond as well. To compensate latency, I used actuator values from previous timestep in the cost function so that the cost function could be calculated based on the actual value of actuator in each timestep.
 
 ---
 
