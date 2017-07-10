@@ -11,7 +11,7 @@ double dt = 0.1;
 
 const double Lf = 2.67;
 
-double ref_v = 75;
+double ref_v = 65;
 size_t x_start = 0;
 size_t y_start = x_start + N;
 size_t psi_start = y_start + N;
@@ -22,13 +22,15 @@ size_t delta_start = epsi_start + N;
 size_t a_start = delta_start + N - 1;
 
 // hyper parameters
-int cte_coeff = 2500;
-int epsi_coeff = 3000;
-int v_coeff = 2;
-int delta_coeff = 100;
-int a_coeff = 100;
-int delta_d_coeff = 200;
-int a_d_coeff = 10;
+int cte_coeff = 300;
+int epsi_coeff = 300;
+int v_coeff = 1;
+int cte_error_coeff = 1;
+int epsi_error_coeff = 30;
+int delta_coeff = 300;
+int a_coeff = 10;
+int delta_d_coeff = 30;
+int a_d_coeff = 1;
 
 class FG_eval {
  public:
@@ -53,6 +55,10 @@ class FG_eval {
       fg[0] += cte_coeff * CppAD::pow(vars[cte_start + i], 2);
       fg[0] += epsi_coeff * CppAD::pow(vars[epsi_start + i], 2);
       fg[0] += v_coeff * CppAD::pow(vars[v_start + i] - ref_v, 2);
+
+      // when error goes larger, reduce the velocity
+      fg[0] += cte_error_coeff * CppAD::pow(vars[cte_start + i] * vars[v_start + i], 2);
+      fg[0] += epsi_error_coeff * CppAD::pow(vars[epsi_start + i] * vars[v_start + i], 2);
     }
 
     for (int i = 0; i < N - 1; i++) {
