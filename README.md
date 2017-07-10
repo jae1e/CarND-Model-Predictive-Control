@@ -3,6 +3,13 @@ Self-Driving Car Engineer Nanodegree Program
 
 ![Capture](capture.PNG)
 
+---
+
+### Model
+There are two actuators to decide state of the car: delta and a. Delta is steering angle to control the heading direction of  the vehicle and a controls throttling. Also, constraints equation for waypoint fitting can be written as below.
+
+
+
 
 ---
 
