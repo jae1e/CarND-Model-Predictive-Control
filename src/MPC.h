@@ -15,10 +15,6 @@ public:
   // Solve the model given an initial state and polynomial coefficients.
   // Return the first actuatotions.
   vector<double> Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs);
-
-public:
-  double prev_delta;
-  double prev_a;
 };
 
 #endif /* MPC_H */
