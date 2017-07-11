@@ -13,7 +13,7 @@ There are two actuators to decide state of the car: delta and a. Delta is steeri
 <img src="equation.png" width="360"/>
 
 ### Timestep Length and Elapsed Duration
-Timestep length was 15 and elapsed time duration was 0.1 second. Timestep length is better to be longer, and time duration 0.1 was selected by the test to get good fitting result of the waypoints.
+Timestep length times elapsed duration is the timespan of prediction. In ideal case, timestep length should be long enough to predict the way, and time duration should be short enough to get precise waypoint setting. However, longer timestep length and shorter time duration can make burden of calculation since it increases the number of calculation. At first, I picked 10 for timestep length and 0.05 for elapsed duration. After few iteration of the test, I changed values to timestep length 15 and elapsed duration 0.1 to reduce the number of calculation while I can predict the waypoints of longer time.
 
 ### Polynomial Fitting and MPC preprocessing
 While building cost function, all status parameters(cte, v and epsi) and actuator parameters(delta and a) were considered. Also, two equation were added to the cost function to reduce the velocity when cte and epsi gets larger. These two equations helped maintain status of the car, because cte and epsi error can be controlled easier in lower velocity. For each parameter, cost coefficient as hyper parameters was tuned by the test.
