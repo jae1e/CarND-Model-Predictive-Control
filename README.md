@@ -19,7 +19,7 @@ Timestep length times elapsed duration is the timespan of prediction. In ideal c
 While building cost function, all status parameters(cte, v and epsi) and actuator parameters(delta and a) were considered. Also, two equation were added to the cost function to reduce the velocity when cte and epsi gets larger. These two equations helped maintain status of the car, because cte and epsi error can be controlled easier in lower velocity. For each parameter, cost coefficient as hyper parameters was tuned by the test.
 
 ### Model Predictive Control with Latency
-There was 100 millisecond latency in actuators. To compensate it, the solver need to get the status at the time of actuation actually occurs. I assumed that the actuators are constant during the latency timespan, and predicted status at the time after latency time from the current time. The status became the source of the solver instead of actual current status, reflecting the latency of actuators.
+There was 100 millisecond latency in actuators. To compensate it, the solver need to get the status at the time of actuation actually occurs. I assumed that the actuators are constant during the latency timespan, and predicted status at the time after latency time from the current time. The status became the source of the solver instead of actual current status, considering the latency of actuators.
 
 ---
 
