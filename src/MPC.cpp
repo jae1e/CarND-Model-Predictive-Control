@@ -22,15 +22,15 @@ size_t delta_start = epsi_start + N;
 size_t a_start = delta_start + N - 1;
 
 // hyper parameters
-int cte_coeff = 300;
-int epsi_coeff = 300;
-int v_coeff = 1;
+int cte_coeff = 5;
+int epsi_coeff = 1000;
+int v_coeff = 10;
 int cte_error_coeff = 1;
-int epsi_error_coeff = 30;
-int delta_coeff = 300;
+int epsi_error_coeff = 50;
+int delta_coeff = 50;
 int a_coeff = 10;
-int delta_d_coeff = 30;
-int a_d_coeff = 1;
+int delta_d_coeff = 500;
+int a_d_coeff = 10;
 
 class FG_eval {
  public:
@@ -71,24 +71,6 @@ class FG_eval {
       fg[0] += a_d_coeff * CppAD::pow(vars[a_start + i + 1] - vars[a_start + i], 2);
     }
 
-    // for (int i = 0; i < N; i++) {
-    //   fg[0] += 3000*CppAD::pow(vars[cte_start + i], 2);
-    //   fg[0] += 3000*CppAD::pow(vars[epsi_start + i], 2);
-    //   fg[0] += CppAD::pow(vars[v_start + i] - ref_v, 2);
-    // }
-
-    // for (int i = 0; i < N - 1; i++) {
-    //   fg[0] += 5*CppAD::pow(vars[delta_start + i], 2);
-    //   fg[0] += 5*CppAD::pow(vars[a_start + i], 2);
-    //   // try adding penalty for speed + steer
-    //   fg[0] += 700*CppAD::pow(vars[delta_start + i] * vars[v_start+i], 2);
-    // }
-
-    // for (int i = 0; i < N - 2; i++) {
-    //   fg[0] += 200*CppAD::pow(vars[delta_start + i + 1] - vars[delta_start + i], 2);
-    //   fg[0] += 10*CppAD::pow(vars[a_start + i + 1] - vars[a_start + i], 2);
-    // }
-
     //
     // Setup Constraints
     //
@@ -115,9 +97,8 @@ class FG_eval {
       AD<double> epsi1 = vars[epsi_start + t];
       AD<double> epsi0 = vars[epsi_start + t - 1];
 
-      // use the value from the previous frame to compensate latency
-      AD<double> a = t > 1 ? vars[a_start + t - 2] : vars[a_start + t - 1];
-      AD<double> delta = t > 1 ? vars[delta_start + t - 2] : vars[delta_start + t - 1];
+      AD<double> a = vars[a_start + t - 1];
+      AD<double> delta = vars[delta_start + t - 1];
 
       AD<double> f0 = coeffs[0] + coeffs[1] * x0 + coeffs[2] * CppAD::pow(x0, 2) + coeffs[3] * CppAD::pow(x0, 3);
       AD<double> psides0 = CppAD::atan(coeffs[1] + 2 * coeffs[2] * x0 + 3 * coeffs[3] * CppAD::pow(x0, 2));

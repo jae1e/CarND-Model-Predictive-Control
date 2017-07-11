@@ -90,7 +90,17 @@ int main() {
           double px = j[1]["x"];
           double py = j[1]["y"];
           double psi = j[1]["psi"];
-          double v = j[1]["speed"];
+          double v = j[1]["speed"];          
+          double a = j[1]["throttle"];
+          double delta = j[1]["steering_angle"];
+
+          // latency compensation
+          double Lf = 2.67;
+          double dt_l = 0.1;          
+          px += v * cos(psi) * dt_l;
+          py += v * sin(psi) * dt_l;
+          psi -= v/Lf * delta * deg2rad(25) * dt_l;
+          v += a * dt_l;
 
           Eigen::VectorXd ptwx(6);
           Eigen::VectorXd ptwy(6);
@@ -107,8 +117,15 @@ int main() {
           double cte = polyeval(coeffs, 0);
           double epsi = -atan(coeffs[1]);
 
+          // double cte_l = cte - 0.0 + v * sin(epsi) * dt_l;
+          // double epsi_l = psi + epsi - v/Lf * delta * dt_l;
+          mpc.prev_delta = delta;
+          mpc.prev_a = a;
+
+          // solve
           Eigen::VectorXd state(6);
-          state << 0, 0, 0, v, cte, epsi;
+          // state << x_l, y_l, psi_l, v_l, cte, epsi;
+          state << 0.0, 0.0, 0.0, v, cte, epsi;
           vector<double> result = mpc.Solve(state, coeffs);
           auto rit = result.begin();
           double steer_value = *rit++;
